@@ -4,14 +4,11 @@ var jsdom = require("jsdom");
 var webpage = require("./webpage");
 const JQUERY_URL = "http://code.jquery.com/jquery.js";
 var getDom = require("./getDom");
-function getParams(endpoint) {
-  return webpage(endpoint)
 
-}
 let url = "https://dev.twitter.com/rest/reference/post/statuses/destroy/%3Aid";
 
 let getParams_ = (arr, sel) => {
-  var params = arr[sel[0]];
+  var params = arr[sel];
   let paramTypes = {
     optional: [],
     required: []
@@ -26,11 +23,9 @@ let getParams_ = (arr, sel) => {
   });
   return paramTypes;
 }
-module.exports = function (url, sel) {
-  return getDom(url, sel)
-    .then(data => {
-      let params = getParams_(data, sel);
-      return params;
-    });
+module.exports = function (data, sel) {
+
+  let params = getParams_(data, sel);
+  return params;
 
 }

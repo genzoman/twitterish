@@ -6,6 +6,7 @@ const JQUERY_URL = "http://code.jquery.com/jquery.js";
 
 module.exports = getDom;
 function getDom(url, selectors) {
+  console.log(url," *****************")
   return new Promise(resolve => {
     //
     webpage(url)
@@ -13,6 +14,7 @@ function getDom(url, selectors) {
         jsdom.env(data,
           [JQUERY_URL]
           , function (err, window) {
+            if(err) reject(err)
             var retVal = {};
             selectors.forEach(sel => {
               retVal[sel] = window.$(sel);
@@ -24,5 +26,7 @@ function getDom(url, selectors) {
           });
       });
     //
+  }).catch(e =>{
+    debugger 
   });
 }
