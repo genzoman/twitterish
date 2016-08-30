@@ -2,17 +2,23 @@ let getDom = require("./getDom");
 let getEndpointUrls = require("./getEndpointUrls")
 let getParametersForEndpoint = require("./getParametersForEndpoint");
 var Promise = require("bluebird");
-
+var path = require("path");
 let baseUrl = "https://dev.twitter.com";
 let twitterEndpoints = [];
 var selectors = require("./selectors")
-getDom("https://dev.twitter.com/rest/reference/get/statuses/mentions_timeline", [".leaf", ".param"])
-  .then(getEndpointUrls)
-  .then(getParametersPromises)
-  .then(data => {
-    console.log("a;ldjf;adjf;lkadjf;lkadj;l")
-  })
-
+// getDom("https://dev.twitter.com/rest/reference/get/statuses/mentions_timeline", [".leaf", ".param"])
+//   .then(getEndpointUrls)
+//   .then(getParametersPromises)
+//   .then(data => {
+//     console.log("a;ldjf;adjf;lkadjf;lkadj;l")
+//   })
+getDom({
+  path: "./twitter.html",
+  selectors: [".param"]
+})
+.then(data => {
+  debugger;
+})
 
 
 function getParametersPromises(data) {
