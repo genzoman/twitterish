@@ -15,9 +15,9 @@ getDom("https://dev.twitter.com/rest/reference/get/statuses/mentions_timeline", 
 
 
 function getParametersPromises(data) {
-  let promises = data.map(e => {
+  return Promise.all(data.map(e => {
     return () => {
-      return getDom(baseUrl + e, [".leaf", ".param"])
+      return getDom(baseUrl + e, [".param"])
         .then(data => {
           let params = getParametersForEndpoint(data);
           return {
@@ -27,7 +27,5 @@ function getParametersPromises(data) {
         })
     }
     
-  });
-  let all = promises.map(p => p());
-  return Promise.all(all);
+  }).map(p => p()));
 }
