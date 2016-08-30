@@ -5,10 +5,7 @@ var webpage = require("./webpage");
 const JQUERY_URL = "http://code.jquery.com/jquery.js";
 var transform = require("./transform");
 let url = "https://dev.twitter.com/rest/reference/post/statuses/destroy/%3Aid";
-
-let selectors = {
-  param: ".param"
-}
+var selectors = require("./selectors")
 
 module.exports = function (data) {
   return transform(data, selectors.param, e => {

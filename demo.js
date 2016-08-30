@@ -5,6 +5,7 @@ var Promise = require("bluebird");
 
 let baseUrl = "https://dev.twitter.com";
 let twitterEndpoints = [];
+var selectors = require("./selectors")
 getDom("https://dev.twitter.com/rest/reference/get/statuses/mentions_timeline", [".leaf", ".param"])
   .then(getEndpointUrls)
   .then(getParametersPromises)
@@ -17,7 +18,7 @@ getDom("https://dev.twitter.com/rest/reference/get/statuses/mentions_timeline", 
 function getParametersPromises(data) {
   return Promise.all(data.map(e => {
     return () => {
-      return getDom(baseUrl + e, [".param"])
+      return getDom(baseUrl + e, [selectors.endpoints])
         .then(data => {
           let params = getParametersForEndpoint(data);
           return {
