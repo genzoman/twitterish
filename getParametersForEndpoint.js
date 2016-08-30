@@ -6,10 +6,13 @@ const JQUERY_URL = "http://code.jquery.com/jquery.js";
 var transform = require("./transform");
 let url = "https://dev.twitter.com/rest/reference/post/statuses/destroy/%3Aid";
 
+let selectors = {
+  param: ".param"
+}
 
 module.exports = function (data) {
-  return transform(data, ".param", e => {
-    var params = data[".param"];
+  return transform(data, selectors.param, e => {
+    var params = data[selectors.param];
     let paramTypes = {
       optional: [],
       required: []

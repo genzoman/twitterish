@@ -6,19 +6,16 @@ var Promise = require("bluebird");
 let baseUrl = "https://dev.twitter.com";
 let twitterEndpoints = [];
 getDom("https://dev.twitter.com/rest/reference/get/statuses/mentions_timeline", [".leaf", ".param"])
-  .then(data => getEndpointUrls(data))
+  .then(getEndpointUrls)
+  .then(getParametersPromises)
   .then(data => {
-    Promise.all(getParametersPromises(data).map(e => e()))
-      .then(data => {
-        console.log("done")
-        debugger;
-      })
-
+    console.log("a;ldjf;adjf;lkadjf;lkadj;l")
   })
 
 
+
 function getParametersPromises(data) {
-  return data.map(e => {
+  let promises = data.map(e => {
     return () => {
       return getDom(baseUrl + e, [".leaf", ".param"])
         .then(data => {
@@ -29,6 +26,8 @@ function getParametersPromises(data) {
           }
         })
     }
-
+    
   });
+  let all = promises.map(p => p());
+  return Promise.all(all);
 }
