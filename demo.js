@@ -11,9 +11,7 @@ getDom("https://dev.twitter.com/rest/reference/get/statuses/mentions_timeline", 
 
   })
   .then(data => {
-    var promises = getParametersPromises(data);
-    promises = promises.map(e => e())
-    Promise.all(promises)
+    Promise.all(getParametersPromises(data).map(e => e()))
       .then(data => {
         console.log("done")
         debugger;
