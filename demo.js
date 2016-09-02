@@ -13,12 +13,13 @@ var selectors = require("./selectors")
 //     console.log("a;ldjf;adjf;lkadjf;lkadj;l")
 //   })
 getDom({
-  path: "./twitter.html",
-  selectors: [".param"]
+  file: "./twitter.html",
+  selectors: ["a"]
 })
 .then(data => {
   debugger;
 })
+
 
 
 function getParametersPromises(data) {

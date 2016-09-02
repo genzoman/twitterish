@@ -37,22 +37,14 @@ function getDom(options) {
       fs.readFileAsync(options.file, "utf-8")
         .then(data => {
           jsdom.env({
-            file: options.file,
+            html: data,
             scripts: ["http://code.jquery.com/jquery.js"],
             done: function (err, window) {
               resolve(getSelectorData(options.selectors,window));
             }
           });
-        });
+        })
+        .catch(e => console.log(e));
     }
   });
 }
-getDom({
-  file: "./twitter.html",
-  scripts: ["http://code.jquery/jquery.js"],
-  selectors: ["a"]
-})
-.then(data => {
-  let links = data[selectors.endpoints];
-  debugger;
-});
