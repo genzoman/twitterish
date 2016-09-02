@@ -11,6 +11,7 @@
   "dependencies": {
     "bluebird": "^3.4.3",
     "jsdom": "^9.4.2",
+    "mocha": "^3.0.2",
     "node-twitter-api": "^1.7.4",
     "oath": "^1.0.0",
     "oauth": "^0.9.14",

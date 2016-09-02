@@ -1,4 +1,5 @@
 module.exports = {
   param: ".param",
-  endpoints: ".leaf"
+  endpoints: ".leaf",
+  a: "a"
 }

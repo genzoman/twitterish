@@ -3,29 +3,48 @@ var fs = Promise.promisifyAll(require("fs"));
 var jsdom = require("jsdom");
 var webpage = require("./webpage");
 const JQUERY_URL = "http://code.jquery.com/jquery.js";
+var selectors = require("./selectors")
+
+let getSelectorData = (selectors, window) => {
+  var retVal = {};
+  selectors.forEach(sel => {
+    retVal[sel] = window.$(sel);
+    retVal[sel] = Object.keys(retVal[sel])
+      .map(key => retVal[sel][key]);
+  });
+  return retVal;
+}
 
 module.exports = getDom;
-function getDom(url, selectors) {
-  return new Promise(resolve => {
-    //
-    webpage(url)
-      .then(data => {
-        jsdom.env(data,
-          [JQUERY_URL]
-          , function (err, window) {
-            if(err) reject(err)
-            var retVal = {};
-            selectors.forEach(sel => {
-              retVal[sel] = window.$(sel);
-              retVal[sel] = Object.keys(retVal[sel])
-                .map(key => retVal[sel][key]);
-            });
 
-            resolve(retVal);
+function getDom(options) {
+ 
+  return new Promise(resolve => {
+    if (options.url) {
+      webpage(options.url)
+        .then(data => {
+          jsdom.env({
+            url: options.url,
+            scripts: ["http://code.jquery.com/jquery.js"],
+            done: function (err, window) {
+              resolve(getSelectorData(options.selectors, window));
+            }
           });
-      });
-    //
-  }).catch(e =>{
-    debugger 
+        });
+      
+    }
+    else {
+      fs.readFileAsync(options.file, "utf-8")
+        .then(data => {
+          jsdom.env({
+            html: data,
+            scripts: ["http://code.jquery.com/jquery.js"],
+            done: function (err, window) {
+              resolve(getSelectorData(options.selectors,window));
+            }
+          });
+        })
+        .catch(e => console.log(e));
+    }
   });
 }
