@@ -18,7 +18,7 @@ getDom({
 })
 .then(data => {
   debugger;
-})
+});
 
 
 
