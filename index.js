@@ -21927,18 +21927,9 @@ let render = (data,isClicked) => {
         d.hasChildren = d.children && d.children.length > 0
         return d.data.name;
       })
-      .classed("node",true)
-      .attr("class",d =>(!d.children || d.children.length === 0) ? "leaf" : "children");
-    let leafs = d3.selectAll(".leaf")
-      .on("click",function(e){
-        
-      });
-    let nodes = d3.selectAll(".children")
-      .on("click",function(e) {
-        var x = this;
-        //toggleChildren(e);
-        render(e.children,true)
-      });
+      .classed("root",true);
+  
+   
   }
   else {
     let li = ul.selectAll("li .node")
@@ -21948,24 +21939,32 @@ let render = (data,isClicked) => {
         .text(d => {
           return d.data.name;
         })
+        .style("padding-left",d => d.depth * 10 + "px")
         .classed("node",true)
-        .attr("class",d =>(!d.children || d.children.length === 0) ? "leaf" : "children");
-
-         let leafs = d3.selectAll(".leaf")
-      .on("click",function(e){
-        
-      });
-    let nodes = d3.selectAll(".children")
-      .on("click",function(e) {
-        var x = this;
-        //toggleChildren(e);
-        render(e.children,true)
-      });
+        .attr("class","children");
+      
   }
-   
  
 }
-
+var shouldRemove = false;
 json("./flare.json")
-  .then(data =>render(data,false));
+  .then(data =>{
+    render(data,false); 
+    events();
+  });
+
+ let events = () => {
+   d3.selectAll(".children, .root")
+  .on("click",function(e) {
+    if(e.isOpen){
+      d3.selectAll(".children").remove();
+       e.isOpen = !e.isOpen;
+      return;
+    }
+    e.isOpen = !e.isOpen;
+    //toggleChildren(e);
+    render(e.children,true)
+  });
+ }
+
 },{"bluebird":2,"d3":3}]},{},[4]);
