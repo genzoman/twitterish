@@ -14,9 +14,13 @@ let glyphs = {
   folderClosed: "caret glyphicon glyphicon-chevron-right",
   folderOpen: "caret glyphicon glyphicon-chevron-down"
 }
+
 var container = d3.select("body").append("div").attr("id","container");
 let render = (data,parent) => {
-   if(data && data.parent === null) {
+   let isRoot = (data) => {
+     return data && data.parent === null;
+   }
+   if(isRoot(data)) {
       let divs = parent.selectAll("div")
     .data([data])
     .enter()
@@ -26,12 +30,13 @@ let render = (data,parent) => {
         return d.data.name;
       })
       .classed("root",true)
+      .append("span")
       .attr("class",d => glyphs.folderClosed + " root")
   
    
   }
   else {
-    let divs = parent.selectAll(".node")
+    let divs = parent.selectAll("div")
       .data(data)
       .enter()
         .append("div")
@@ -45,7 +50,8 @@ let render = (data,parent) => {
   }
   events();
 }
-var shouldRemove = false;
+
+
 json("./flare.json")
   .then(data =>{
     render(d3.hierarchy(data),container); 

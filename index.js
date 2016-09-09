@@ -21910,47 +21910,51 @@ json = (path) => {
         });
     });
 }
-var container = d3.select("body").append("div").attr("id","container");
-let toggleChildren = (e) => {
-  // var children = e.children;
-  // render(children);
+let glyphs = {
+  folderClosed: "caret glyphicon glyphicon-chevron-right",
+  folderOpen: "caret glyphicon glyphicon-chevron-down"
 }
-let render = (data,parent,isClicked) => {
-   
-   var hierarchy = !isClicked ? d3.hierarchy(data): data;
-   if(hierarchy.parent === null) {
+
+var container = d3.select("body").append("div").attr("id","container");
+let render = (data,parent) => {
+   let isRoot = (data) => {
+     return data && data.parent === null;
+   }
+   if(isRoot(data)) {
       let divs = parent.selectAll("div")
-    .data([hierarchy])
+    .data([data])
     .enter()
       .append("div")
       .text(d => {
         d.hasChildren = d.children && d.children.length > 0
         return d.data.name;
       })
-      .classed("root",true);
+      .classed("root",true)
+      .append("span")
+      .attr("class",d => glyphs.folderClosed + " root")
   
    
   }
   else {
-    let divs = parent.selectAll(".node")
+    let divs = parent.selectAll("div")
       .data(data)
       .enter()
         .append("div")
         .text(d => {
           return d.data.name;
         })
-        .style("padding-left",d => d.depth * 10 + "px")
+        .style("padding-left",d => d.depth * 5 + "px")
         .classed("node",true)
         .attr("class","children");
       
   }
   events();
 }
-var shouldRemove = false;
+
+
 json("./flare.json")
   .then(data =>{
-    render(data,container,false); 
-    //events();
+    render(d3.hierarchy(data),container); 
   });
 
  let events = () => {
@@ -21959,12 +21963,15 @@ json("./flare.json")
     d3.event.stopPropagation();
     if(e.isOpen){
       d3.select(this).selectAll(".children").remove();
-       e.isOpen = !e.isOpen;
+      e.isOpen = !e.isOpen;
       return;
     }
     e.isOpen = !e.isOpen;
-    //toggleChildren(e);
-    render(e.children,d3.select(this),true)
+    if(this.__data__.children) {
+      d3.select(this).classed(glyphs.folderClosed, false);
+      d3.select(this).classed(glyphs.folderOpen, true);
+      render(e.children,d3.select(this));
+    } 
   });
  }
 
